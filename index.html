@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>For You 💖</title>
+  <title>Para ti mi linda💖</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       background-color: #fff0f5;
       font-family: 'Comic Sans MS', cursive;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
       overflow: hidden;
     }
     h1 {
-      margin-top: 50px;
-      color: #d63384;
+    color: #d63384;
+    margin-bottom: 20px;
+    text-align: center;
     }
     button {
       padding: 15px 30px;
@@ -49,24 +53,25 @@
   </style>
 </head>
 <body>
-  <h1>Click me to see how I feel about you 💘</h1>
-  <button id="heartButton">Click me!</button>
+  <h1>Presiona y verás como me siento por ti</h1>
+  <button id="heartButton">Presioname Zunguita!</button>
 
-  <script>
+ <script>
     const heartButton = document.getElementById('heartButton');
+    const heartTypes = ['❤', '💕', '💞', '💓', '💗', '💖'];
 
     function createHeart() {
       const heart = document.createElement('div');
       heart.classList.add('heart');
-      heart.textContent = '❤️';
+      heart.textContent = heartTypes[Math.floor(Math.random() * heartTypes.length)];
       heart.style.left = Math.random() * 100 + 'vw';
       heart.style.fontSize = (20 + Math.random() * 30) + 'px';
       document.body.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 3000);
-    }
+    setTimeout(() => {
+      heart.remove();
+    }, 3000);
+  }
 
     heartButton.addEventListener('click', () => {
       for (let i = 0; i < 10; i++) {
