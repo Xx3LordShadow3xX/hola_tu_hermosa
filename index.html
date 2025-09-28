@@ -435,15 +435,8 @@
       } else {
         playBtn.textContent = '⏸️';
         musicPlaying = true;
-        // bgMusic.play(); // Uncomment when you add music files
-        
-        // For demo purposes, show playing state
-        setTimeout(() => {
-          if (musicPlaying) {
-            playBtn.textContent = '▶️';
-            musicPlaying = false;
-          }
-        }, 5000);
+        bgMusic.src = playlist[currentSongIndex].src;
+        bgMusic.play();
       }
     });
 
@@ -451,9 +444,8 @@
       currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
       updateSongTitle();
       if (musicPlaying) {
-        // Switch to previous song and play
-        // bgMusic.src = playlist[currentSongIndex].src;
-        // bgMusic.play();
+        bgMusic.src = playlist[currentSongIndex].src;
+        bgMusic.play();
       }
     });
 
@@ -461,9 +453,8 @@
       currentSongIndex = (currentSongIndex + 1) % playlist.length;
       updateSongTitle();
       if (musicPlaying) {
-        // Switch to next song and play
-        // bgMusic.src = playlist[currentSongIndex].src;
-        // bgMusic.play();
+        bgMusic.src = playlist[currentSongIndex].src;
+        bgMusic.play();
       }
     });
   </script>
