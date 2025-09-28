@@ -2,81 +2,471 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Para ti mi linda💖</title>
   <style>
-   body {
-    margin: 0;
-    padding: 0;
-    height: 100%;         
-    background-color: #fff0f5;
-    font-family: 'Comic Sans MS', cursive;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    overflow: hidden;
-}
-    h1 {
-    color: #d63384;
-    margin-bottom: 20px;
-    text-align: center;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    button {
-      padding: 15px 30px;
+
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+      height: 100vh;
+      background: linear-gradient(-45deg, #ff6b9d, #ffd93d, #6bcf7f, #4d79ff, #ff6b9d);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Loading Animation */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff6b9d, #4d79ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-heart {
+      font-size: 4rem;
+      animation: pulse 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); opacity: 0.8; }
+      to { transform: scale(1.3); opacity: 1; }
+    }
+
+    /* Mouse trail hearts */
+    .trail-heart {
+      position: absolute;
+      pointer-events: none;
       font-size: 20px;
-      background-color: #ff69b4;
+      animation: trailFade 0.8s ease-out forwards;
+      z-index: 5;
+    }
+
+    @keyframes trailFade {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.5) translateY(-20px);
+      }
+    }
+
+    /* Background stars */
+    .bg-star {
+      position: absolute;
+      pointer-events: none;
+      font-size: 16px;
+      z-index: -1;
+      animation: starTwinkle 3s ease-in-out infinite;
+    }
+
+    @keyframes starTwinkle {
+      0%, 100% { 
+        opacity: 0; 
+        transform: scale(0.5);
+      }
+      50% { 
+        opacity: 0.8; 
+        transform: scale(1.2);
+      }
+    }
+
+    /* Glassmorphism Container */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 3rem;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      transform: translateY(30px);
+      opacity: 0;
+      animation: slideIn 1s ease 0.5s forwards;
+    }
+
+    @keyframes slideIn {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      color: #fff;
+      margin-bottom: 2rem;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      animation: textGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      from { text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5); }
+      to { text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.8); }
+    }
+
+    .button-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.2);
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 15px;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.2s;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
     button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    button:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    /* Music Player */
+    .music-player {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      min-width: 280px;
+    }
+
+    .music-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .music-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .music-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
       transform: scale(1.1);
     }
+
+    .play-btn {
+      width: 55px;
+      height: 55px;
+      font-size: 1.2rem;
+    }
+
+    .music-info {
+      color: white;
+      font-size: 1rem;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .song-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    /* Heart animations */
     .heart {
       position: absolute;
       font-size: 30px;
-      animation: fall 3s linear forwards;
+      animation: heartFall 4s linear forwards;
       pointer-events: none;
+      z-index: 10;
     }
-    @keyframes fall {
+
+    @keyframes heartFall {
       0% {
-        transform: translateY(-50px) rotate(0deg);
+        transform: translateY(-50px) rotate(0deg) scale(0.5);
         opacity: 1;
       }
+      50% {
+        transform: translateY(50vh) rotate(180deg) scale(1);
+        opacity: 0.8;
+      }
       100% {
-        transform: translateY(100vh) rotate(360deg);
+        transform: translateY(100vh) rotate(360deg) scale(0.3);
         opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .glass-container {
+        margin: 1rem;
+        padding: 2rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 <body>
-  <h1>Presiona y verás como me siento por ti</h1>
-  <button id="heartButton">Presioname Zunguita!</button>
+  <!-- Loading Screen -->
+  <div class="loader" id="loader">
+    <div class="loader-heart">💖</div>
+  </div>
 
- <script>
+  <!-- Main Content -->
+  <div class="glass-container">
+    <h1>Presiona y verás como me siento por ti</h1>
+    
+    <div class="button-container">
+      <button id="heartButton">Presioname Zunguita! 💕</button>
+    </div>
+
+    <div class="music-player">
+      <div class="music-info">
+        <div class="song-title" id="songTitle">No hay música</div>
+        <div style="opacity: 0.7; font-size: 0.9rem;">Música para ti 🎵</div>
+      </div>
+      <div class="music-controls">
+        <button class="music-btn" id="prevBtn">⏮️</button>
+        <button class="music-btn play-btn" id="playBtn">▶️</button>
+        <button class="music-btn" id="nextBtn">⏭️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden audio element -->
+  <audio id="bgMusic" loop preload="auto">
+    <!-- You'll need to add your music files here -->
+    <!-- <source src="song1.mp3" type="audio/mpeg"> -->
+  </audio>
+
+  <script>
+    // Loading screen
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 2000);
+    });
+
+    // Elements
     const heartButton = document.getElementById('heartButton');
-    const heartTypes = ['❤', '💕', '💞', '💓', '💗', '💖'];
+    const playBtn = document.getElementById('playBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const bgMusic = document.getElementById('bgMusic');
+    const songTitle = document.getElementById('songTitle');
 
+    const heartTypes = ['❤️', '💕', '💞', '💓', '💗', '💖', '💝', '💘', '💙', '💜', '🧡', '💛', '💚'];
+    let musicPlaying = false;
+    let currentSongIndex = 0;
+
+    // Playlist - you can add your romantic songs here
+    const playlist = [
+      { title: "Perfect - Ed Sheeran", src: "" },
+      { title: "All of Me - John Legend", src: "" },
+      { title: "Thinking Out Loud - Ed Sheeran", src: "" },
+      { title: "A Thousand Years - Christina Perri", src: "" }
+    ];
+
+    // Update song title
+    function updateSongTitle() {
+      songTitle.textContent = playlist[currentSongIndex].title;
+    }
+
+    // Initialize
+    updateSongTitle();
+
+    // Mouse trail hearts - following cursor closely
+    document.addEventListener('mousemove', (e) => {
+      // Create trail heart more frequently for smooth following effect
+      if (Math.random() > 0.7) { // More frequent than before
+        const trailHeart = document.createElement('div');
+        trailHeart.classList.add('trail-heart');
+        trailHeart.textContent = '💗';
+        // Position slightly behind cursor with small random offset
+        trailHeart.style.left = (e.clientX - 10 + Math.random() * 20) + 'px';
+        trailHeart.style.top = (e.clientY - 10 + Math.random() * 20) + 'px';
+        document.body.appendChild(trailHeart);
+
+        setTimeout(() => {
+          trailHeart.remove();
+        }, 800);
+      }
+    });
+
+    // Background stars
+    function createBackgroundStar() {
+      const star = document.createElement('div');
+      star.classList.add('bg-star');
+      star.textContent = '✨';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      star.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        star.remove();
+      }, 6000);
+    }
+
+    // Generate background stars periodically
+    setInterval(() => {
+      if (Math.random() > 0.7) { // 30% chance every interval
+        createBackgroundStar();
+      }
+    }, 2000);
+
+    // Initial stars
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => createBackgroundStar(), i * 500);
+    }
+
+    // Create falling hearts
     function createHeart() {
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.textContent = heartTypes[Math.floor(Math.random() * heartTypes.length)];
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+      heart.style.fontSize = (20 + Math.random() * 40) + 'px';
+      heart.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
       document.body.appendChild(heart);
 
-    setTimeout(() => {
-      heart.remove();
-    }, 3000);
-  }
+      setTimeout(() => {
+        heart.remove();
+      }, 4000);
+    }
 
+    // Heart button click
     heartButton.addEventListener('click', () => {
-      for (let i = 0; i < 10; i++) {
-        setTimeout(createHeart, i * 100); // cascades hearts for extra cute
+      // Create burst of hearts
+      for (let i = 0; i < 15; i++) {
+        setTimeout(createHeart, i * 80);
+      }
+      
+      // Button animation
+      heartButton.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        heartButton.style.transform = '';
+      }, 150);
+    });
+
+    // Music controls
+    playBtn.addEventListener('click', () => {
+      if (musicPlaying) {
+        bgMusic.pause();
+        playBtn.textContent = '▶️';
+        musicPlaying = false;
+      } else {
+        playBtn.textContent = '⏸️';
+        musicPlaying = true;
+        // bgMusic.play(); // Uncomment when you add music files
+        
+        // For demo purposes, show playing state
+        setTimeout(() => {
+          if (musicPlaying) {
+            playBtn.textContent = '▶️';
+            musicPlaying = false;
+          }
+        }, 5000);
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+      updateSongTitle();
+      if (musicPlaying) {
+        // Switch to previous song and play
+        // bgMusic.src = playlist[currentSongIndex].src;
+        // bgMusic.play();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentSongIndex = (currentSongIndex + 1) % playlist.length;
+      updateSongTitle();
+      if (musicPlaying) {
+        // Switch to next song and play
+        // bgMusic.src = playlist[currentSongIndex].src;
+        // bgMusic.play();
       }
     });
   </script>
