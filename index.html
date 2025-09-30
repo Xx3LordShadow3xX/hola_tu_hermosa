@@ -225,6 +225,30 @@
       justify-content: center;
     }
 
+    .music-btn.rewind {
+      transform: rotate(90deg);
+    }
+
+    .music-btn.forward {
+      transform: rotate(-90deg);
+    }
+
+    .music-btn.rewind:hover {
+      transform: rotate(90deg) scale(1.1) translateY(-2px);
+    }
+
+    .music-btn.forward:hover {
+      transform: rotate(-90deg) scale(1.1) translateY(-2px);
+    }
+
+    .music-btn.rewind:active {
+      transform: rotate(90deg) scale(1.05) translateY(0);
+    }
+
+    .music-btn.forward:active {
+      transform: rotate(-90deg) scale(1.05) translateY(0);
+    }
+
     .music-btn:hover {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
       transform: scale(1.1) translateY(-2px);
@@ -324,16 +348,16 @@
       </div>
       <div class="music-controls">
         <button class="music-btn prev" id="prevBtn">⏮</button>
-        <button class="music-btn rewind" id="rewindBtn">↻</button>
+        <button class="music-btn rewind" id="rewindBtn">↺</button>
         <button class="music-btn play play-btn" id="playBtn">▶︎</button>
-        <button class="music-btn forward" id="forwardBtn">↺</button>
+        <button class="music-btn forward" id="forwardBtn">↻</button>
         <button class="music-btn next" id="nextBtn">⏭</button>
       </div>
     </div>
   </div>
 
   <!-- Hidden audio element -->
-  <audio id="bgMusic" loop preload="auto">
+  <audio id="bgMusic" preload="auto">
     <!-- You'll need to add your music files here -->
     <!-- <source src="song1.mp3" type="audio/mpeg"> -->
   </audio>
