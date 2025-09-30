@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para ti mi linda💖</title>
+  <title>Para mi cati hermosa💗</title>
   <style>
     * {
       margin: 0;
@@ -254,7 +254,7 @@
 
     @keyframes heartFall {
       0% {
-        transform: translateY(-50px) rotate(0deg) scale(0.5);
+        transform: translateY(-100px) rotate(0deg) scale(0.5);
         opacity: 1;
       }
       50% {
@@ -293,10 +293,10 @@
 
   <!-- Main Content -->
   <div class="glass-container">
-    <h1>Presiona y verás como me siento por ti</h1>
+    <h1>Bienvenida al portal del amor mi reina💗</h1>
     
     <div class="button-container">
-      <button id="heartButton">Presioname Zunguita! 💕</button>
+      <button id="heartButton">Presióname mi vida! 💕</button>
     </div>
 
     <div class="music-player">
@@ -334,15 +334,14 @@
     const bgMusic = document.getElementById('bgMusic');
     const songTitle = document.getElementById('songTitle');
 
-    const heartTypes = ['❤️', '💕', '💞', '💓', '💗', '💖', '💝', '💘', '💙', '💜', '🧡', '💛', '💚'];
+    const heartTypes = ['❤️', '💕', '💞', '💓', '💗', '💖', '💘', '💙', '💜', '🧡'];
     let musicPlaying = false;
     let currentSongIndex = 0;
 
     // Playlist - you can add your romantic songs here
     const playlist = [
-      { title: "A Donde Vamos - Morat", src: "songs/A_Donde_Vamos_-_Morat.mp3.mp3" },
-       { title: "Niña Bonita - Dstance", src: "songs/Niña_Bonita_-_Dstance.mp3.mp3" }
-      
+      { title: "A Donde Vamos - Morat", src: "songs/A_Donde_Vamos_-_Morat.mp3" },
+      { title: "Niña Bonita - Dstance", src: "songs/Niña_Bonita_-_Dstance.mp3" }
     ];
 
     // Update song title
@@ -405,6 +404,7 @@
       heart.classList.add('heart');
       heart.textContent = heartTypes[Math.floor(Math.random() * heartTypes.length)];
       heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.top = '-100px'; // Start above the screen
       heart.style.fontSize = (20 + Math.random() * 40) + 'px';
       heart.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
       document.body.appendChild(heart);
@@ -438,7 +438,16 @@
         playBtn.textContent = '⏸️';
         musicPlaying = true;
         bgMusic.src = playlist[currentSongIndex].src;
-        bgMusic.play();
+        
+        // Add error handling
+        bgMusic.play().then(() => {
+          console.log('Music started playing successfully');
+        }).catch(error => {
+          console.error('Error playing music:', error);
+          alert('Error playing music: ' + error.message);
+          playBtn.textContent = '▶️';
+          musicPlaying = false;
+        });
       }
     });
 
@@ -447,7 +456,9 @@
       updateSongTitle();
       if (musicPlaying) {
         bgMusic.src = playlist[currentSongIndex].src;
-        bgMusic.play();
+        bgMusic.play().catch(error => {
+          console.error('Error playing music:', error);
+        });
       }
     });
 
@@ -456,7 +467,9 @@
       updateSongTitle();
       if (musicPlaying) {
         bgMusic.src = playlist[currentSongIndex].src;
-        bgMusic.play();
+        bgMusic.play().catch(error => {
+          console.error('Error playing music:', error);
+        });
       }
     });
   </script>
