@@ -205,30 +205,48 @@
     .music-controls {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 1rem;
     }
 
     .music-btn {
-      width: 45px;
-      height: 45px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      border: none;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+      border: 2px solid rgba(255, 255, 255, 0.4);
       color: white;
-      font-size: 1rem;
+      font-size: 20px;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .music-btn:hover {
-      background: rgba(255, 255, 255, 0.4);
-      transform: scale(1.1);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .music-btn:active {
+      transform: scale(1.05) translateY(0);
     }
 
     .play-btn {
-      width: 55px;
-      height: 55px;
-      font-size: 1.2rem;
+      width: 65px;
+      height: 65px;
+      font-size: 24px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.15));
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .play-btn:hover {
+      transform: scale(1.15) translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
 
     .music-info {
@@ -305,9 +323,11 @@
         <div style="opacity: 0.7; font-size: 0.9rem;">Música para ti 🎵</div>
       </div>
       <div class="music-controls">
-        <button class="music-btn" id="prevBtn">⏮️</button>
-        <button class="music-btn play-btn" id="playBtn">▶️</button>
-        <button class="music-btn" id="nextBtn">⏭️</button>
+        <button class="music-btn prev" id="prevBtn">⏮</button>
+        <button class="music-btn rewind" id="rewindBtn">↻</button>
+        <button class="music-btn play play-btn" id="playBtn">▶︎</button>
+        <button class="music-btn forward" id="forwardBtn">↺</button>
+        <button class="music-btn next" id="nextBtn">⏭</button>
       </div>
     </div>
   </div>
@@ -331,6 +351,8 @@
     const playBtn = document.getElementById('playBtn');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const rewindBtn = document.getElementById('rewindBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
     const bgMusic = document.getElementById('bgMusic');
     const songTitle = document.getElementById('songTitle');
 
@@ -351,6 +373,16 @@
 
     // Initialize
     updateSongTitle();
+
+    // Auto-play next song when current song ends
+    bgMusic.addEventListener('ended', () => {
+      currentSongIndex = (currentSongIndex + 1) % playlist.length;
+      updateSongTitle();
+      bgMusic.src = playlist[currentSongIndex].src;
+      bgMusic.play().catch(error => {
+        console.error('Error playing next song:', error);
+      });
+    });
 
     // Mouse trail hearts - following cursor closely
     document.addEventListener('mousemove', (e) => {
@@ -433,10 +465,10 @@
     playBtn.addEventListener('click', () => {
       if (musicPlaying) {
         bgMusic.pause();
-        playBtn.textContent = '▶️';
+        playBtn.textContent = '▶︎';
         musicPlaying = false;
       } else {
-        playBtn.textContent = '⏸️';
+        playBtn.textContent = '⏸';
         musicPlaying = true;
         bgMusic.src = playlist[currentSongIndex].src;
         
@@ -446,7 +478,7 @@
         }).catch(error => {
           console.error('Error playing music:', error);
           alert('Error playing music: ' + error.message);
-          playBtn.textContent = '▶️';
+          playBtn.textContent = '▶︎';
           musicPlaying = false;
         });
       }
@@ -455,23 +487,35 @@
     prevBtn.addEventListener('click', () => {
       currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
       updateSongTitle();
-      if (musicPlaying) {
-        bgMusic.src = playlist[currentSongIndex].src;
-        bgMusic.play().catch(error => {
-          console.error('Error playing music:', error);
-        });
-      }
+      bgMusic.src = playlist[currentSongIndex].src;
+      bgMusic.play().then(() => {
+        playBtn.textContent = '⏸';
+        musicPlaying = true;
+      }).catch(error => {
+        console.error('Error playing music:', error);
+      });
     });
 
     nextBtn.addEventListener('click', () => {
       currentSongIndex = (currentSongIndex + 1) % playlist.length;
       updateSongTitle();
-      if (musicPlaying) {
-        bgMusic.src = playlist[currentSongIndex].src;
-        bgMusic.play().catch(error => {
-          console.error('Error playing music:', error);
-        });
-      }
+      bgMusic.src = playlist[currentSongIndex].src;
+      bgMusic.play().then(() => {
+        playBtn.textContent = '⏸';
+        musicPlaying = true;
+      }).catch(error => {
+        console.error('Error playing music:', error);
+      });
+    });
+
+    // Rewind 15 seconds
+    rewindBtn.addEventListener('click', () => {
+      bgMusic.currentTime = Math.max(0, bgMusic.currentTime - 15);
+    });
+
+    // Forward 15 seconds
+    forwardBtn.addEventListener('click', () => {
+      bgMusic.currentTime = Math.min(bgMusic.duration, bgMusic.currentTime + 15);
     });
   </script>
 </body>
