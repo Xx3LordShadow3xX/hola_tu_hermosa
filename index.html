@@ -366,8 +366,6 @@
 
   <!-- Hidden audio element -->
   <audio id="bgMusic" preload="auto">
-    <!-- You'll need to add your music files here -->
-    <!-- <source src="song1.mp3" type="audio/mpeg"> -->
   </audio>
 
   <script>
@@ -385,22 +383,73 @@
     const nextBtn = document.getElementById('nextBtn');
     const rewindBtn = document.getElementById('rewindBtn');
     const forwardBtn = document.getElementById('forwardBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const sequenceBtn = document.getElementById('sequenceBtn');
     const bgMusic = document.getElementById('bgMusic');
     const songTitle = document.getElementById('songTitle');
 
     const heartTypes = ['❤️', '💕', '💞', '💓', '💗', '💖', '💘', '💙', '💜', '🧡'];
     let musicPlaying = false;
     let currentSongIndex = 0;
+    let isShuffleMode = false;
+    let playedSongs = [];
 
-    // Playlist - you can add your romantic songs here
+    // Playlist
     const playlist = [
       { title: "A Donde Vamos - Morat", src: "songs/A_Donde_Vamos_-_Morat.mp3.mp3" },
-      { title: "Niña Bonita - Dstance", src: "songs/Niña_Bonita_-_Dstance.mp3.mp3" }
+      { title: "Niña Bonita - Dstance", src: "songs/Niña_Bonita_-_Dstance.mp3.mp3" },
+      { title: "Bésame Sin Sentir - Micro TDH", src: "songs/Besame_sin_sentir_-_MicroTDH.mp3.mp3" },
+      { title: "De Cero - Morat", src: "songs/De_Cero_-_Morat.mp3.mp3" },
+      { title: "Embrujo - Morat", src: "songs/Embrujo_-_Morat.mp3.mp3" },
+      { title: "La Mitad - Camilo", src: "songs/La_Mitad_-_Camilo.mp3.mp3" },
+      { title: "Me Rehúso - Danny Ocean", src: "songs/Me_Rehuso_-_Danny_Ocean.mp3.mp3" },
+      { title: "Medialuna - Camilo", src: "songs/Medialuna_-_Camilo.mp3.mp3" },
+      { title: "Mi Bendición - Juan Luis Guerra", src: "songs/Mi_Bendicion_-_Juan_Luis_Guerra.mp3.mp3" },
+      { title: "Mi Cuarto - Tiago PZK", src: "songs/Mi_Cuarto_-_TiagoPZK.mp3.mp3" },
+      { title: "Mi Suerte - Morat", src: "songs/Mi_Suerte_-_Morat.mp3.mp3" },
+      { title: "Mi Vida Entera - Morat", src: "songs/Mi_vida_entera_-_Morat.mp3.mp3" },
+      { title: "Por Primera Vez - Camilo", src: "songs/Por_Primera_Vez_-_Camilo.mp3.mp3" },
+      { title: "Primeras Veces - Morat", src: "songs/Primeras_Veces_-_Morat.mp3.mp3" },
+      { title: "Si Estoy Contigo - Camilo", src: "songs/Si_estoy_contigo_-_Camilo.mp3.mp3" }
     ];
 
     // Update song title
     function updateSongTitle() {
       songTitle.textContent = playlist[currentSongIndex].title;
+    }
+
+    // Get next song based on mode
+    function getNextSong() {
+      if (isShuffleMode) {
+        if (playedSongs.length >= playlist.length) {
+          playedSongs = [];
+        }
+        
+        let availableSongs = [];
+        for (let i = 0; i < playlist.length; i++) {
+          if (!playedSongs.includes(i)) {
+            availableSongs.push(i);
+          }
+        }
+        
+        const randomIndex = Math.floor(Math.random() * availableSongs.length);
+        currentSongIndex = availableSongs[randomIndex];
+        playedSongs.push(currentSongIndex);
+      } else {
+        currentSongIndex = (currentSongIndex + 1) % playlist.length;
+      }
+    }
+
+    // Get previous song based on mode
+    function getPreviousSong() {
+      if (isShuffleMode) {
+        if (playedSongs.length > 1) {
+          playedSongs.pop();
+          currentSongIndex = playedSongs[playedSongs.length - 1];
+        }
+      } else {
+        currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+      }
     }
 
     // Initialize
@@ -416,14 +465,12 @@
       });
     });
 
-    // Mouse trail hearts - following cursor closely
+    // Mouse trail hearts
     document.addEventListener('mousemove', (e) => {
-      // Create trail heart more frequently for smooth following effect
-      if (Math.random() > 0.7) { // More frequent than before
+      if (Math.random() > 0.7) {
         const trailHeart = document.createElement('div');
         trailHeart.classList.add('trail-heart');
         trailHeart.textContent = '💗';
-        // Position slightly behind cursor with small random offset
         trailHeart.style.left = (e.clientX - 10 + Math.random() * 20) + 'px';
         trailHeart.style.top = (e.clientY - 10 + Math.random() * 20) + 'px';
         document.body.appendChild(trailHeart);
@@ -450,14 +497,12 @@
       }, 6000);
     }
 
-    // Generate background stars periodically
     setInterval(() => {
-      if (Math.random() > 0.7) { // 30% chance every interval
+      if (Math.random() > 0.7) {
         createBackgroundStar();
       }
     }, 2000);
 
-    // Initial stars
     for (let i = 0; i < 8; i++) {
       setTimeout(() => createBackgroundStar(), i * 500);
     }
@@ -468,7 +513,7 @@
       heart.classList.add('heart');
       heart.textContent = heartTypes[Math.floor(Math.random() * heartTypes.length)];
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.top = '-100px'; // Start above the screen
+      heart.style.top = '-100px';
       heart.style.fontSize = (20 + Math.random() * 40) + 'px';
       const hueShift = Math.random() > 0.5 ? Math.random() * 30 : 280 + Math.random() * 80;
       heart.style.filter = `hue-rotate(${hueShift}deg)`;
@@ -481,12 +526,10 @@
 
     // Heart button click
     heartButton.addEventListener('click', () => {
-      // Create burst of hearts
       for (let i = 0; i < 15; i++) {
         setTimeout(createHeart, i * 80);
       }
       
-      // Button animation
       heartButton.style.transform = 'scale(0.95)';
       setTimeout(() => {
         heartButton.style.transform = '';
@@ -504,7 +547,6 @@
         musicPlaying = true;
         bgMusic.src = playlist[currentSongIndex].src;
         
-        // Add error handling
         bgMusic.play().then(() => {
           console.log('Music started playing successfully');
         }).catch(error => {
@@ -544,7 +586,7 @@
     shuffleBtn.addEventListener('click', () => {
       if (!isShuffleMode) {
         isShuffleMode = true;
-        playedSongs = [currentSongIndex]; // Mark current song as played
+        playedSongs = [currentSongIndex];
         shuffleBtn.classList.add('active');
         sequenceBtn.classList.remove('active');
       }
@@ -554,7 +596,7 @@
     sequenceBtn.addEventListener('click', () => {
       if (isShuffleMode) {
         isShuffleMode = false;
-        playedSongs = []; // Reset played songs
+        playedSongs = [];
         shuffleBtn.classList.remove('active');
         sequenceBtn.classList.add('active');
       }
