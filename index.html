@@ -225,6 +225,12 @@
       justify-content: center;
     }
 
+    .music-btn.active {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.3));
+      border-color: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
     .music-btn.rewind {
       transform: rotate(90deg);
     }
@@ -347,11 +353,13 @@
         <div style="opacity: 0.7; font-size: 0.9rem;">Música para ti 🎵</div>
       </div>
       <div class="music-controls">
+        <button class="music-btn" id="shuffleBtn">⇄</button>
         <button class="music-btn prev" id="prevBtn">⏮</button>
         <button class="music-btn rewind" id="rewindBtn">↺</button>
         <button class="music-btn play play-btn" id="playBtn">▶︎</button>
         <button class="music-btn forward" id="forwardBtn">↻</button>
         <button class="music-btn next" id="nextBtn">⏭</button>
+        <button class="music-btn active" id="sequenceBtn">↳↰</button>
       </div>
     </div>
   </div>
@@ -387,20 +395,7 @@
     // Playlist - you can add your romantic songs here
     const playlist = [
       { title: "A Donde Vamos - Morat", src: "songs/A_Donde_Vamos_-_Morat.mp3.mp3" },
-      { title: "Niña Bonita - Dstance", src: "songs/Niña_Bonita_-_Dstance.mp3.mp3" },
-      { title: "Bésame Sin Sentir - Micro TDH", src: "songs/Besame_sin_sentir_-_MicroTDH.mp3.mp3" },
-      { title: "De Cero - Morat", src: "songs/De_Cero_-_Morat.mp3.mp3" },
-      { title: "Embrujo - Morat", src: "songs/Embrujo_-_Morat.mp3.mp3" },
-      { title: "La Mitad - Camilo", src: "songs/La_Mitad_-_Camilo.mp3.mp3" },
-      { title: "Me Rehúso - Danny Ocean", src: "songs/Me_Rehuso_-_Danny_Ocean.mp3.mp3" },
-      { title: "Medialuna - Camilo", src: "songs/Medialuna_-_Camilo.mp3.mp3" },
-      { title: "Mi Bendición - Juan Luis Guerra", src: "songs/Mi_Bendicion_-_Juan_Luis_Guerra.mp3.mp3" },
-      { title: "Mi Cuarto - Tiago PZK", src: "songs/Mi_Cuarto_-_TiagoPZK.mp3.mp3" },
-      { title: "Mi Suerte - Morat", src: "songs/Mi_Suerte_-_Morat.mp3.mp3" },
-      { title: "Mi Vida Entera - Morat", src: "songs/Mi_vida_entera_-_Morat.mp3.mp3" },
-      { title: "Por Primera Vez - Camilo", src: "songs/Por_Primera_Vez_-_Camilo.mp3.mp3" },
-      { title: "Primeras Veces - Morat", src: "songs/Primeras_Veces_-_Morat.mp3.mp3" },
-      { title: "Si Estoy Contigo - Camilo", src: "songs/Si_estoy_contigo_-_Camilo.mp3.mp3" }
+      { title: "Niña Bonita - Dstance", src: "songs/Niña_Bonita_-_Dstance.mp3.mp3" }
     ];
 
     // Update song title
@@ -413,7 +408,7 @@
 
     // Auto-play next song when current song ends
     bgMusic.addEventListener('ended', () => {
-      currentSongIndex = (currentSongIndex + 1) % playlist.length;
+      getNextSong();
       updateSongTitle();
       bgMusic.src = playlist[currentSongIndex].src;
       bgMusic.play().catch(error => {
@@ -522,7 +517,7 @@
     });
 
     prevBtn.addEventListener('click', () => {
-      currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+      getPreviousSong();
       updateSongTitle();
       bgMusic.src = playlist[currentSongIndex].src;
       bgMusic.play().then(() => {
@@ -534,7 +529,7 @@
     });
 
     nextBtn.addEventListener('click', () => {
-      currentSongIndex = (currentSongIndex + 1) % playlist.length;
+      getNextSong();
       updateSongTitle();
       bgMusic.src = playlist[currentSongIndex].src;
       bgMusic.play().then(() => {
@@ -543,6 +538,26 @@
       }).catch(error => {
         console.error('Error playing music:', error);
       });
+    });
+
+    // Shuffle button
+    shuffleBtn.addEventListener('click', () => {
+      if (!isShuffleMode) {
+        isShuffleMode = true;
+        playedSongs = [currentSongIndex]; // Mark current song as played
+        shuffleBtn.classList.add('active');
+        sequenceBtn.classList.remove('active');
+      }
+    });
+
+    // Sequence button
+    sequenceBtn.addEventListener('click', () => {
+      if (isShuffleMode) {
+        isShuffleMode = false;
+        playedSongs = []; // Reset played songs
+        shuffleBtn.classList.remove('active');
+        sequenceBtn.classList.add('active');
+      }
     });
 
     // Rewind 15 seconds
