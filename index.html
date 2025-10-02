@@ -467,18 +467,16 @@
 
     // Mouse trail hearts
     document.addEventListener('mousemove', (e) => {
-      if (Math.random() > 0.7) {
-        const trailHeart = document.createElement('div');
-        trailHeart.classList.add('trail-heart');
-        trailHeart.textContent = '💗';
-        trailHeart.style.left = (e.clientX - 10 + Math.random() * 20) + 'px';
-        trailHeart.style.top = (e.clientY - 10 + Math.random() * 20) + 'px';
-        document.body.appendChild(trailHeart);
+      const trailHeart = document.createElement('div');
+      trailHeart.classList.add('trail-heart');
+      trailHeart.textContent = '💗';
+      trailHeart.style.left = (e.clientX - 10 + Math.random() * 20) + 'px';
+      trailHeart.style.top = (e.clientY - 10 + Math.random() * 20) + 'px';
+      document.body.appendChild(trailHeart);
 
-        setTimeout(() => {
-          trailHeart.remove();
-        }, 800);
-      }
+      setTimeout(() => {
+        trailHeart.remove();
+      }, 800);
     });
 
     // Background stars
